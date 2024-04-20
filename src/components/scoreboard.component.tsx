@@ -52,6 +52,9 @@ export function Scoreboard() {
     <div className="scoreboard">
       {matchData.matches.map((match: Match) => {
 
+        const homeTeamImgUrl = `${process.env.PUBLIC_URL}/images/logo_${match.home_team_id}.png`;
+        const awayTeamImgUrl = `${process.env.PUBLIC_URL}/images/logo_${match.away_team_id}.png`;        
+
         const homeTeam = matchData.teams.find((team: Team) => team.team_id === match.home_team_id);
         const awayTeam = matchData.teams.find((team: Team) => team.team_id === match.away_team_id);
 
@@ -62,9 +65,9 @@ export function Scoreboard() {
 
         return (
           <div key={match.match_id} className="match">
-            <span>{homeTeam.team_name_short}</span>
-            <span>{scores.home}:{scores.away}</span>
-            <span>{awayTeam.team_name_short}</span>
+            <span className='home'>{homeTeam.team_name_short}<img className='home-flag' src={homeTeamImgUrl} /></span>
+            <span className='score'>{scores.home}:{scores.away}</span>
+            <span className='away'><img className='away-flag' src={awayTeamImgUrl} />{awayTeam.team_name_short}</span>
           </div>
         );
       })}
