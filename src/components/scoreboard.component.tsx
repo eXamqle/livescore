@@ -5,7 +5,7 @@ import { Event } from '../helpers/event.interface'
 import { Team } from '../helpers/team.interface';
 import { Match } from '../helpers/match.interface';
 
-const Scoreboard = () => {
+export function Scoreboard() {
   const [matchData, setMatchData] = useState<MatchData>({ phase: '', teams: [], matches: [], events: [] });
   const matchService = new MatchService();
   const scoresRef = useRef<{ [key: number]: { home: number, away: number } }>({});
@@ -71,5 +71,3 @@ const Scoreboard = () => {
     </div>
   );
 };
-
-export default Scoreboard;
