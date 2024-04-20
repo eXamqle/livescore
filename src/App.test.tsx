@@ -1,15 +1,14 @@
 import React from 'react';
-import { render, screen } from '@testing-library/react';
-import App from './App';
+import { render } from '@testing-library/react';
 
 // custom imports
 import { MatchService } from './services/match.service';
+import { Scoreboard } from '../src/components/scoreboard.component';
 
-test('renders learn react link', () => {
-  render(<App />);
-  const linkElement = screen.getByText(/learn react/i);
-  expect(linkElement).toBeInTheDocument();
-});
+test('renders without crashing', () => {
+	render(<Scoreboard />);
+	// Add more assertions as needed
+  });
 
 describe('MatchService', () => {
 	it('fetches match data from the server', async () => {
