@@ -7,13 +7,12 @@ import { Scoreboard } from '../src/components/scoreboard.component';
 
 test('renders without crashing', () => {
 	render(<Scoreboard />);
-	// Add more assertions as needed
-  });
+});
 
 describe('MatchService', () => {
 	it('fetches match data from the server', async () => {
-	  const service = new MatchService();
-	  const data = await service.getMatches();
-	  expect(data).toBeDefined();
+		const service = new MatchService();
+		const data = await service.getMatches();
+		expect(data).toBeDefined();
 	});
-  });
+});
