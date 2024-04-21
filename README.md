@@ -9,12 +9,12 @@ The Scoreboard component is a part of a React application that displays live mat
 ## Features
 Real-time Data Retrieval: The component uses the MatchService to fetch match data from the server every 2 seconds.
 Error Handling: If there’s an error while retrieving data, it renders an error message.
-Responsive Design: The component adjusts its layout based on the window width.
+Responsive Design: The component adjusts its layout based on the window width it also displays long names if the screen size is wide enough.
 Live Score Updates: The component updates the scores in real-time for each match. It only adds goals for event IDs higher than the previous ones to avoid duplications.
 Team Logos: The component displays the home and away team logos next to the team names.
 
 ## Install and run the project
-Run the project with "npm install && npm run"
+Run the project with "npm install && npm start"
 
 ## Tests
 To run test use "npm test" and press "a"
