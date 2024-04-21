@@ -11,11 +11,10 @@ export function Scoreboard() {
 
   // Refs
   const scoresRef = useRef<{ [key: number]: { home: number, away: number } }>({});
-  const matchStatusRef = useRef<{ [key: number]: { status: string } }>({});
   const lastEventIdRef = useRef<number>(0);
 
   // States
-  const [matchData, setMatchData] = useState<MatchData>({ phase: '', teams: [], matches: [], events: [] });
+  const [matchData, setMatchData] = useState<MatchData>({ phase: 'pre_match', teams: [], matches: [], events: [] });
   const [windowWidth, setWindowWidth] = useState(window.innerWidth);
   const [error, setError] = useState<string | null>(null);
 
@@ -47,15 +46,6 @@ export function Scoreboard() {
                 lastEventIdRef.current = event.event_id;
               }
             }
-
-            if (match && !matchStatusRef.current[match.match_id]) {
-              matchStatusRef.current[match.match_id] = { status: ''};
-            }
-
-            if (match && event.event_type == 'match_end') {
-              matchStatusRef.current[match.match_id].status = 'match_end'
-            }
-
           });
 
           setMatchData(data);
@@ -89,8 +79,7 @@ export function Scoreboard() {
         if (!homeTeam || !awayTeam) return null;
 
         const scores = scoresRef.current[match.match_id] || { home: 0, away: 0 };
-        const matchStatus = matchStatusRef.current[match.match_id]?.status || '';
-
+		
         return (
           <div key={match.match_id} className="match">
             <span className='home'>
@@ -98,8 +87,8 @@ export function Scoreboard() {
               <img className='home-flag' src={homeTeamImgUrl} alt="Home Team Flag" />
             </span>
 
-            <span className={matchStatus === 'match_end' ? 'score' : 'score blink'}>
-              {scores.home}:{scores.away}
+            <span className={matchData.phase === 'match' ? 'score blink' : 'score'} style={{ backgroundColor: matchData.phase === 'pre_match' ? '#f9f9f9' : '#01a5e2' }}>
+				{matchData.phase === 'pre_match' ? '' : `${scores.home}:${scores.away}`}
             </span>
 
             <span className='away'>
