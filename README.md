@@ -1,46 +1,20 @@
-# Getting Started with Create React App
+# Livescore
+The primary goal of this project was to develop a dynamic and interactive web page that accurately calculates and displays the scores of sports matches in a league, in real time.
+The web page is designed to handle multiple sports matches concurrently, all of which could be happening on the same match day. It showcases the team pairings for the current day and receives match events in real time. 
+These events are then used to display and update live scores.
 
-This project was bootstrapped with [Create React App](https://github.com/facebook/create-react-app).
+# Scoreboard component
+The Scoreboard component is a part of a React application that displays live match scores. It retrieves match data from a server, updates the scores in real-time, and renders them in a responsive interface.
 
-## Available Scripts
+## Features
+Real-time Data Retrieval: The component uses the MatchService to fetch match data from the server every 2 seconds.
+Error Handling: If there’s an error while retrieving data, it renders an error message.
+Responsive Design: The component adjusts its layout based on the window width.
+Live Score Updates: The component updates the scores in real-time for each match. It only adds goals for event IDs higher than the previous ones to avoid duplications.
+Team Logos: The component displays the home and away team logos next to the team names.
 
-In the project directory, you can run:
+## Install and run the project
+Run the project with "npm install && npm run"
 
-### `npm start`
-
-Runs the app in the development mode.\
-Open [http://localhost:3000](http://localhost:3000) to view it in the browser.
-
-The page will reload if you make edits.\
-You will also see any lint errors in the console.
-
-### `npm test`
-
-Launches the test runner in the interactive watch mode.\
-See the section about [running tests](https://facebook.github.io/create-react-app/docs/running-tests) for more information.
-
-### `npm run build`
-
-Builds the app for production to the `build` folder.\
-It correctly bundles React in production mode and optimizes the build for the best performance.
-
-The build is minified and the filenames include the hashes.\
-Your app is ready to be deployed!
-
-See the section about [deployment](https://facebook.github.io/create-react-app/docs/deployment) for more information.
-
-### `npm run eject`
-
-**Note: this is a one-way operation. Once you `eject`, you can’t go back!**
-
-If you aren’t satisfied with the build tool and configuration choices, you can `eject` at any time. This command will remove the single build dependency from your project.
-
-Instead, it will copy all the configuration files and the transitive dependencies (webpack, Babel, ESLint, etc) right into your project so you have full control over them. All of the commands except `eject` will still work, but they will point to the copied scripts so you can tweak them. At this point you’re on your own.
-
-You don’t have to ever use `eject`. The curated feature set is suitable for small and middle deployments, and you shouldn’t feel obligated to use this feature. However we understand that this tool wouldn’t be useful if you couldn’t customize it when you are ready for it.
-
-## Learn More
-
-You can learn more in the [Create React App documentation](https://facebook.github.io/create-react-app/docs/getting-started).
-
-To learn React, check out the [React documentation](https://reactjs.org/).
+## Tests
+To run test use "npm test" and press "a"
