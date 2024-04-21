@@ -17,6 +17,7 @@ export function Scoreboard() {
   // States
   const [matchData, setMatchData] = useState<MatchData>({ phase: '', teams: [], matches: [], events: [] });
   const [windowWidth, setWindowWidth] = useState(window.innerWidth);
+  const [error, setError] = useState<string | null>(null);
 
   // Additional
   const isMobile = windowWidth < 1600;
@@ -46,7 +47,7 @@ export function Scoreboard() {
                 lastEventIdRef.current = event.event_id;
               }
             }
-            
+
             if (match && !matchStatusRef.current[match.match_id]) {
               matchStatusRef.current[match.match_id] = { status: ''};
             }
@@ -60,7 +61,7 @@ export function Scoreboard() {
           setMatchData(data);
         })
         .catch((error) => {
-          console.error('There was an error!', error);
+          setError('There was an error while retrieving the data from the server')
         });
     }, 2000);
 
@@ -75,6 +76,7 @@ export function Scoreboard() {
 
   return (
     <div className="scoreboard">
+      {error && <div className="error">{error}</div>}
       {matchData.matches.map((match: Match) => {
 
         const homeTeamImgUrl = `${process.env.PUBLIC_URL}/images/logo_${match.home_team_id}.png`;
