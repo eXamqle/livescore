@@ -13,15 +13,17 @@
 }
 
 .scoreboard {
-	width: 30%;
+	width: 40%;
 	margin: auto;
 	border: 1px solid #ccc;
 	border-radius: 5px;
 	background-color: #f9f9f9;
 	box-shadow: 0 2px 5px rgba(0, 0, 0, 0.3);
+	padding: 0px 30px;
 }
 
 .match {
+	position: relative;
 	display: flex;
 	justify-content: space-between;
 	padding: 20px 0px;
@@ -55,30 +57,74 @@
 	padding-bottom: 3px;
 }
 
-.home {
-    display: flex;
-    align-items: center;
-    flex-wrap: wrap;
-    flex-direction: row;
-    align-content: center;
-    justify-content: space-between;
-	padding-left: 20px;
-}
-
-.away {
-    display: flex;
-    align-items: center;
-    flex-wrap: wrap;
-    flex-direction: row;
-    align-content: center;
-    justify-content: space-between;
-	padding-right: 20px;
+.home-flag,
+.away-flag {
+	position: absolute;
+	margin-top: -10px;
+	height: 70px;
 }
 
 .home-flag {
-	margin-left: 10px;
+	left: 90%;
 }
 
 .away-flag {
-	margin-right: 10px;
+	right: 90%;
 }
+
+.home,
+.away {
+	position: relative;
+	z-index: 1;
+}
+
+@media only screen and (max-width: 1920px) {
+
+	.scoreboard {
+		width: 80%;
+	}
+
+	.home-flag,
+	.away-flag {
+		position: absolute;
+		height: 60px;
+	}
+
+	.home-flag {
+		left: 80%;
+	}
+	
+	.away-flag {
+		right: 80%;
+	}
+}
+
+@media only screen and (max-width: 800px) {
+
+	.scoreboard {
+		width: 90%;
+	}
+
+	.home-flag,
+	.away-flag {
+		position: absolute;
+		height: 40px;
+	}
+
+	.home-flag {
+		left: 70%;
+	}
+	
+	.away-flag {
+		right: 70%;
+	}
+}
+
+@keyframes blink {
+	50% {
+	  opacity: 0.9;
+	}
+  }
+  .blink {
+	animation: blink 1s step-start 0s infinite;
+  }
