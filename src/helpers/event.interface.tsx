@@ -1,4 +1,4 @@
-export type EventType = 'match_start' | 'goal' | 'match_halftime' | 'match_end';
+export type EventType = 'match_start' | 'goal' | 'match_halftime' | 'match_end' | 'betstop';
 
 export interface Event {
 	event_id: number;
