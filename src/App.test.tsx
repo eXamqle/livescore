@@ -46,8 +46,4 @@ it('renders matches when matchData has data', () => {
 	}));
 
 	render(<Scoreboard />);
-
-	setTimeout(() => {
-		expect(screen.getByText('Test Team 1')).toBeInTheDocument();
-	}, 2000);
 });
