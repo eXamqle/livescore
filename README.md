@@ -13,7 +13,7 @@ The Scoreboard component is a part of a React application that displays live mat
 <b>Live Score Updates</b>: The component updates the scores in real-time for each match. It only adds goals for event IDs higher than the previous ones to avoid duplications.  
 <b>Team Logos</b>: The component displays the home and away team logos next to the team names.  
 
-## Install and run the project
+## Install and run the project (node v18.20.2)
 Run the project with "npm install && npm start"
 
 ## Tests
