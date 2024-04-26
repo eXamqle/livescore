@@ -6,20 +6,43 @@ import { MatchService } from './services/match.service';
 import { Scoreboard } from '../src/components/scoreboard.component';
 
 describe('MatchService', () => {
-	it('fetches match data from the server', async () => {
-		const service = new MatchService();
-		const data = await service.getMatches();
-		expect(data).toBeDefined();
+	it('throws an error when the server returns an HTTP error', async () => {
+		window.fetch = jest.fn().mockImplementation(() => Promise.resolve({
+			ok: false,
+			status: 500
+		}));
+
+		const matchService = MatchService.getInstance();
+
+		await expect(matchService.getMatches()).rejects.toThrow('HTTP error! status: 500');
+	});
+
+	it('throws an error when the server returns invalid match data', async () => {
+		window.fetch = jest.fn().mockImplementation(() => Promise.resolve({
+			ok: true,
+			json: () => Promise.resolve({ teams: 'invalid data' })
+		}));
+
+		const matchService = MatchService.getInstance();
+
+		await expect(matchService.getMatches()).rejects.toThrow('Invalid match data');
+	});
+
+	it('returns the same instance when getInstance is called multiple times', () => {
+		const instance1 = MatchService.getInstance();
+		const instance2 = MatchService.getInstance();
+
+		expect(instance1).toBe(instance2);
 	});
 });
 
 it('renders error message when there is an error', () => {
-	MatchService.prototype.getMatches = jest.fn(() => Promise.reject(new Error('Test error')));
+	MatchService.prototype.getMatches = jest.fn(() => Promise.reject(new Error('HTTP error! status: 200')));
 
 	render(<Scoreboard />);
 
 	setTimeout(() => {
-		expect(screen.getByText('There was an error while retrieving the data from the server')).toBeInTheDocument();
+		expect(screen.getByText('HTTP error! status: 200')).toBeInTheDocument();
 	}, 2000);
 });
 
@@ -31,7 +54,7 @@ it('renders matches when matchData has data', () => {
 				"team_id": 8982001,
 				"team_name": "VL Lisbon",
 				"team_name_short": "LIS"
-			}        
+			}
 		],
 		"matches": [
 			{
@@ -46,4 +69,8 @@ it('renders matches when matchData has data', () => {
 	}));
 
 	render(<Scoreboard />);
+});
+
+afterEach(() => {
+	jest.resetAllMocks();
 });
