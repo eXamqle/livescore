@@ -1,4 +1,4 @@
-import React, { useState, useEffect, useRef, useCallback } from 'react';
+import React, { useState, useEffect, useCallback } from 'react';
 import { MatchService } from '../services/match.service';
 import { MatchData } from '../helpers/match-data.interface';
 import { Event } from '../helpers/event.interface'
@@ -9,14 +9,11 @@ export function Scoreboard() {
 	// Import match service as a singleton
 	const matchService = MatchService.getInstance();
 
-	// Refs
-	const scoresRef = useRef<{ [key: number]: { home: number, away: number } }>({});
-	const lastEventIdRef = useRef<number>(0);
-
 	// States
 	const [matchData, setMatchData] = useState<MatchData>({ phase: 'pre_match', teams: [], matches: [], events: [] });
 	const [windowWidth, setWindowWidth] = useState(window.innerWidth);
 	const [error, setError] = useState<string | null>(null);
+	const [scores, setScores] = useState<{ [key: number]: { home: number, away: number } }>({});
 
 	// Additional
 	const isMobile = windowWidth < 1600; // TODO: Add more breakpoints
@@ -25,39 +22,22 @@ export function Scoreboard() {
 	const fetchMatches = useCallback(() => {
 		matchService.getMatches()
 			.then((data: MatchData) => {
+				const newScores: { [key: number]: { home: number, away: number } } = {};
 				data.events.forEach((event: Event) => {
-					const match = data.matches.find((match: Match) => match.match_id === event.match_id);
-					const homeTeam = data.teams.find((team: Team) => team.team_id === match?.home_team_id);
-					const awayTeam = data.teams.find((team: Team) => team.team_id === match?.away_team_id);
-
-					updateScores(event, match, homeTeam, awayTeam);
+					if (event.event_type === 'goal' && (event.score_team === 'home' || event.score_team === 'away') && event.score_amount) {
+						if (!newScores[event.match_id]) {
+							newScores[event.match_id] = { home: 0, away: 0 };
+						}
+						newScores[event.match_id][event.score_team] += event.score_amount;
+					}
 				});
-
 				setMatchData(data);
+				setScores(newScores);
 			})
 			.catch((error) => {
 				setError(error.toString())
 			});
 	}, [matchService]);
-
-	// and a function to update scores because of single responsibility principle
-	const updateScores = (event: Event, match: Match | undefined, homeTeam: Team | undefined, awayTeam: Team | undefined) => {
-		if (event.event_id > lastEventIdRef.current && event.event_type === 'goal' && event.score_amount && event.score_team) {
-			if (match && homeTeam && awayTeam) {
-				if (!scoresRef.current[match.match_id]) {
-					scoresRef.current[match.match_id] = { home: 0, away: 0 };
-				}
-
-				if (event.score_team === 'home') {
-					scoresRef.current[match.match_id].home += event.score_amount;
-				} else if (event.score_team === 'away') {
-					scoresRef.current[match.match_id].away += event.score_amount;
-				}
-
-				lastEventIdRef.current = event.event_id;
-			}
-		}
-	}
 
 	// https://react.dev/learn/synchronizing-with-effects#you-might-not-need-an-effect
 	useEffect(() => {
@@ -72,7 +52,7 @@ export function Scoreboard() {
 	}, []);
 
 	return (
-		<div className="scoreboard">
+		<div className="scoreboard" data-testid={`scoreboard-width-${windowWidth}`}>
 			{error && <div className="error">{error}</div>}
 			{matchData.matches.map((match: Match) => {
 
@@ -82,14 +62,14 @@ export function Scoreboard() {
 				const homeTeam = matchData.teams.find((team: Team) => team.team_id === match.home_team_id);
 				const awayTeam = matchData.teams.find((team: Team) => team.team_id === match.away_team_id);
 
-				const scores = scoresRef.current[match.match_id] || { home: 0, away: 0 };
+				const matchScores = scores[match.match_id] || { home: 0, away: 0 };
 
 				const isPreMatch = matchData.phase === 'pre_match';
 				const isMatch = matchData.phase === 'match';
 
 				const className = isMatch ? 'score blink' : 'score';
 				const backgroundColor = isPreMatch ? '#f9f9f9' : '#01a5e2';
-				const scoreText = isPreMatch ? '' : `${scores.home}:${scores.away}`;
+				const scoreText = isPreMatch ? '' : `${matchScores.home}:${matchScores.away}`;
 
 				// 'homeTeam' and 'awayTeam' is possibly 'undefined'
 				if (!homeTeam || !awayTeam) return null;
