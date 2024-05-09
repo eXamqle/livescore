@@ -2,7 +2,7 @@ import { MatchData } from "../helpers/match-data.interface";
 
 export class MatchService {
 	private static instance: MatchService;
-	private url = 'https://vgcommonstaging.aitcloud.de/livescore/';
+	public url = 'https://vgcommonstaging.aitcloud.de/livescore/';
 
 	private constructor() { }
 
